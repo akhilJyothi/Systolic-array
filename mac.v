@@ -2,13 +2,13 @@ module
     mac (
         input clk,
         input rst_n,    // _n: negative logic
-        input  [7:0] a_in,     // int8
-        input [7:0] b_in,
+        input signed [7:0] a_in,     // int8
+        input signed [7:0] b_in,
         input valid,
         input clear,
-        output reg[7:0] a_out,
-        output reg[7:0]b_out,
-        output reg[20:0] acc
+        output reg signed [7:0] a_out,
+        output reg signed [7:0]b_out,
+        output reg signed [20:0] acc
     );
     
     
@@ -18,7 +18,7 @@ module
     begin
       a_out<= 8'h00;
       b_out<= 8'h00;
-      acc<= 8'h00;
+      acc<= 0;
     end
     else
     begin
