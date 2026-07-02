@@ -1,6 +1,6 @@
 module
     mac (
-        input clk,
+        input  clk,
         input rst_n,    // _n: negative logic
         input signed [7:0] a_in,     // int8
         input signed [7:0] b_in,
