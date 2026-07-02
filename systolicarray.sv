@@ -1,0 +1,55 @@
+module systolic_array (
+parameter ARRAY_SIZE = 8,  //array size nxn mac units
+parameter DATA_WIDTH = 8,   // int8 input width
+parameter ACCUM_WIDTH = 21
+)(
+input logic clk,
+input logic rst_n,
+input logic [DATA_WIDTH-1:0] a_in [ARRAY_SIZE-1:0],
+input logic [DATA_WIDTH-1:0] b_in [ARRAY_SIZE-1:0],
+input logic valid,
+input logic clear,
+output logic signed [ACCUM_WIDTH-1:0]
+results [ARRAY_SIZE-1:0][ARRAY_SIZE-1:0]
+);
+
+
+//interconnection wires
+
+ logic a_bus[8][8];
+ logic b_bus[8][8];
+
+ // pe matrix
+ assign a_bus[8][0]= a_in;
+ assign b_bus[0][8]=b_in;
+genvar i,j;
+generate
+    for (i=0; i<(ARRAY_SIZE-1); i++)
+    begin
+        for (j=0; j<(ARRAY_SIZE-1); j++)
+        begin
+            // if j=0, accept a from a_inor else accept from left 
+            // if i=0, accept input from b_in or else from above
+            mac pe(.clk(clk), .rst_n(rst_n), .valid(valid), .clear(clear),
+            .a_in(a_bus[i]), .b_in(b_bus[i]), .a_out(a_bus[i+1]), .b_out(b_bus[i+1]),
+            .acc(results[i][j]));
+        end
+       
+    end
+endgenerate
+
+
+// mac pe(.clk(clk), .rst_n(rst_n), .valid(valid), .clear(clear),
+//     .a_in(a_in[i]), .b_in(b_in[i]), )
+
+//  mac (
+//         input logic clk,
+//         input  logic rst_n,    // _n: negative logic
+//         input logic signed [7:0] a_in,     // int8
+//         input logic signed [7:0] b_in,
+//         input logic valid,
+//         input logic clear,
+//         output logic  signed [7:0] a_out,
+//         output logic  signed [7:0]b_out,
+//         output logic  signed [20:0] acc
+//     );

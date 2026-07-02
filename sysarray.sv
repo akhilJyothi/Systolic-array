@@ -9,7 +9,10 @@ output logic signed[20:0] results[3:0]
 );
 
    
-wire signed[7:0] a_pe00tope01,b_pe00tope10,a_pe10tope11,b_pe01tope11;
+logic signed[7:0] a_pe00tope01;
+logic signed[7:0] b_pe00tope10;
+logic signed[7:0] a_pe10tope11;
+logic signed[7:0] b_pe01tope11;
 
 mac pe00(.clk(clk),.rst_n(rst_n),.valid(valid), .clear(clear),.a_in(a_in[0]),.b_in(b_in[0]),.a_out(a_pe00tope01),.b_out(b_pe00tope10), .acc(results[0]));
 mac pe01(.clk(clk),.rst_n(rst_n),.valid(valid), .clear(clear),.a_in(a_pe00tope01),.b_in(b_in[1]),.a_out(),.b_out(b_pe01tope11), .acc(results[1]));
