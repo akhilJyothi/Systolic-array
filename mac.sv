@@ -1,14 +1,18 @@
 module
     mac (
+parameter ARRAY_SIZE = 8,  //array size nxn mac units
+parameter DATA_WIDTH = 8,   // int8 input width
+parameter ACCUM_WIDTH = 21
+)(
         input logic clk,
         input  logic rst_n,    // _n: negative logic
-        input logic signed [7:0] a_in,     // int8
-        input logic signed [7:0] b_in,
+        input logic signed [(DATA_WIDTH-1):0] a_in,     // int8
+        input logic signed [(DATA_WIDTH-1):0] b_in,
         input logic valid,
         input logic clear,
-        output logic  signed [7:0] a_out,
-        output logic  signed [7:0]b_out,
-        output logic  signed [20:0] acc
+        output logic  signed [(DATA_WIDTH-1):0] a_out,
+        output logic  signed [(DATA_WIDTH-1):0]b_out,
+        output logic  signed [ACCUM_WIDTH-1:0] acc
     );
     
     

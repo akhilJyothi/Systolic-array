@@ -16,22 +16,27 @@ results [ARRAY_SIZE-1:0][ARRAY_SIZE-1:0]
 
 //interconnection wires
 
- logic a_bus[8][8];
- logic b_bus[8][8];
+ logic [(DATA_WIDTH-1):0]a_bus[(ARRAY_SIZE-1):0][(ARRAY_SIZE):0];
+ logic [(DATA_WIDTH-1):0]b_bus[(ARRAY_SIZE):0][(ARRAY_SIZE-1):0];
+
+
+// a_bus[0][0] ----> PE00 ----> a_bus[0][1] ----> PE01 ----> a_bus[0][2]
+
+// a_bus[1][0] ----> PE10 ----> a_bus[1][1] ----> PE11 ----> a_bus[1][2]
+
 
  // pe matrix
- assign a_bus[8][0]= a_in;
- assign b_bus[0][8]=b_in;
 genvar i,j;
 generate
-    for (i=0; i<(ARRAY_SIZE-1); i++)
+    for (i=0; i<(ARRAY_SIZE); i++)
     begin
-        for (j=0; j<(ARRAY_SIZE-1); j++)
+        for (j=0; j<(ARRAY_SIZE); j++)
         begin
             // if j=0, accept a from a_inor else accept from left 
             // if i=0, accept input from b_in or else from above
             mac pe(.clk(clk), .rst_n(rst_n), .valid(valid), .clear(clear),
-            .a_in(a_bus[i]), .b_in(b_bus[i]), .a_out(a_bus[i+1]), .b_out(b_bus[i+1]),
+            .a_in(a_bus[i][j]), .b_in(b_bus[i][j]), 
+            .a_out(a_bus[i][j+1]), .b_out(b_bus[i+1][j]),
             .acc(results[i][j]));
         end
        
