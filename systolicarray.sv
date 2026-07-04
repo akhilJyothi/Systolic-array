@@ -1,4 +1,4 @@
-module systolic_array (
+module systolic_array #(
 parameter ARRAY_SIZE = 8,  //array size nxn mac units
 parameter DATA_WIDTH = 8,   // int8 input width
 parameter ACCUM_WIDTH = 21
@@ -34,7 +34,7 @@ generate
         begin
             // if j=0, accept a from a_inor else accept from left 
             // if i=0, accept input from b_in or else from above
-            mac pe(.clk(clk), .rst_n(rst_n), .valid(valid), .clear(clear),
+            mac_unit pe(.clk(clk), .rst_n(rst_n), .valid(valid), .clear(clear),
             .a_in(a_bus[i][j]), .b_in(b_bus[i][j]), 
             .a_out(a_bus[i][j+1]), .b_out(b_bus[i+1][j]),
             .acc(results[i][j]));

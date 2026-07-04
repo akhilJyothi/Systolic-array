@@ -1,6 +1,5 @@
 module
-    mac (
-parameter ARRAY_SIZE = 8,  //array size nxn mac units
+    mac_unit #(
 parameter DATA_WIDTH = 8,   // int8 input width
 parameter ACCUM_WIDTH = 21
 )(
@@ -12,7 +11,7 @@ parameter ACCUM_WIDTH = 21
         input logic clear,
         output logic  signed [(DATA_WIDTH-1):0] a_out,
         output logic  signed [(DATA_WIDTH-1):0]b_out,
-        output logic  signed [ACCUM_WIDTH-1:0] acc
+        output logic  signed [ACCUM_WIDTH-1:0] accum_out
     );
     
     
@@ -22,7 +21,7 @@ parameter ACCUM_WIDTH = 21
     begin
       a_out<= 8'h00;
       b_out<= 8'h00;
-      acc<= 0;
+      accum_out<= 0;
     end
     else
     begin
@@ -30,11 +29,11 @@ parameter ACCUM_WIDTH = 21
       b_out<=b_in;
       if(clear)
       begin
-        acc<=0;
+        accum_out<=0;
       end
       else if (valid) 
       begin
-      acc<=acc +(a_in*b_in);  
+      accum_out<=accum_out +ACCUM_WIDTH'(a_in*b_in);    //removes ambiguity and extends result to 21 bit signed
       end
     end
   end
