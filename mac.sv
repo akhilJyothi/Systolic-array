@@ -19,20 +19,21 @@ parameter ACCUM_WIDTH = 21
   begin
     if(!rst_n)
     begin
-      a_out<= 8'h00;
-      b_out<= 8'h00;
-      accum_out<= 0;
+      a_out<= '0;
+      b_out<= '0;
+      accum_out<= '0;
     end
     else
     begin
-      a_out<=a_in;
-      b_out<=b_in;
+      
       if(clear)
       begin
-        accum_out<=0;
+        accum_out<='0;
       end
       else if (valid) 
       begin
+        a_out<=a_in;
+        b_out<=b_in;
       accum_out<=accum_out +ACCUM_WIDTH'(a_in*b_in);    //removes ambiguity and extends result to 21 bit signed
       end
     end
