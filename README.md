@@ -1,4 +1,4 @@
-# Systolic Array
+#  Parameterized NxN Systolic Array
 
 ## Overview
 
@@ -29,11 +29,19 @@ When `valid` is asserted, the MAC unit performs three operations simultaneously:
    accum_out <= accum_out + ACCUM_WIDTH'(a_in * b_in);
 
 ## Module operation
+
+### rst_n
 The module has an actively asynchronous reset (rst_n) and when the reset is asserted the pipeline registers a_out, b_out and the accumulator accum_out are cleared. If the rst_n signal is de-asserted the a_out and b_out signal will be loaded with a_in and b_in irrespective of valid signal.
 
-If there is a clear signal now, the accum_out gets cleared. This is actually done when computation of one tile is done and the input matrices of the next tile is to be fed to the PE.
-The purpose of clear is not to flush the pipeline but  it is to reset the accumulated partial sums so the MAC can begin computing the next output tile from zero. So the pipeline registers are not cleared and only the accumulator is cleared since they simply forward operands to neighboring MACs and are overwritten with new input values on the first valid cycle of the next tile..
+### clear
+If there is a clear signal , the accum_out and the pipeline registers a_out and b_out gets cleared. This is actually done when computation of one tile is done and the input matrices of the next tile is to be fed to the PE.
+ The purpose of clear is to flush the pipeline and to reset the accumulated partial sums so the MAC can begin computing the next output tile from zero. 
+ There can be an approach were the pipeline registers are not cleared and only the accumulator is cleared since they simply forward operands to neighboring MACs and are overwritten with new input values on the first valid cycle of the next tile. But this approach is not followed as the overhead due to 2 new flip flops resetting is negligible and now there is an additional benefit of the pipeline registers not having a stale value.
 
+So after finishing one tile, the PE no longer contains stale operands from the previous tile. When the first valid data of the next tile arrives, all three registers are updated together.
+
+
+### valid
 Now if there is a valid signal, then the accum_out action happens, multiplication is done and the running sum in the accumulator register is updated. Also in the multiplier part, the width of a_in*b_in is extended to ACCUM_WIDTH to remove the ambiguity.
 
 
